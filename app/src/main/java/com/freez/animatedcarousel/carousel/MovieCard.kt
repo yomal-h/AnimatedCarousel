@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,47 +64,52 @@ fun MovieCard(
             .scale(Scale.FILL)
             .size(Size.ORIGINAL)
             .build(),
-        contentScale = ContentScale.Fit,
+        contentScale = ContentScale.FillWidth,
     ).state
 
 
     // MovieCard layout
-    Box(
-        modifier = Modifier
-            .width(200.dp)
-            .height(250.dp)
-            .padding(8.dp),
-        contentAlignment = Alignment.BottomStart
-    ) {
-        // If the image loading fails, show an error icon
-        if (imageState is AsyncImagePainter.State.Error) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
+                    .width(200.dp)
+                    .height(300.dp)
+                    .padding(8.dp),
+                contentAlignment = Alignment.BottomStart
             ) {
-                Icon(
-                    modifier = Modifier.size(70.dp),
-                    imageVector = Icons.Rounded.ImageNotSupported,
-                    contentDescription = mockMovie.title
-                )
-            }
-        }
+                // If the image loading fails, show an error icon
+                if (imageState is AsyncImagePainter.State.Error) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(70.dp),
+                            imageVector = Icons.Rounded.ImageNotSupported,
+                            contentDescription = mockMovie.title
+                        )
+                    }
+                }
 // If the image is loaded successfully, display the image
-        if (imageState is AsyncImagePainter.State.Success) {
+                if (imageState is AsyncImagePainter.State.Success) {
 
 
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(16.dp))
-                    .clickable { onMovieClick(mockMovie) },// Click event handler
-                painter = imageState.painter,
-                contentDescription = mockMovie.title,
-                contentScale = ContentScale.Crop
-            )
-        }
+                    Image(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(16.dp))
+                            .clickable { onMovieClick(mockMovie) },// Click event handler
+                        painter = imageState.painter,
+                        contentDescription = mockMovie.title,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+
+
+
     }
-}
+
+

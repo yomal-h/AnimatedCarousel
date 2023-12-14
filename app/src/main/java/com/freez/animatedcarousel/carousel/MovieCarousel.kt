@@ -7,6 +7,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -73,6 +75,8 @@ fun MovieCarousel(
     pagerPaddingValues: PaddingValues = PaddingValues(horizontal = 100.dp),
     onMovieClick: (MockData) -> Unit
 ) {
+    val isDarkMode = isSystemInDarkTheme()
+
     // Pager state for handling horizontal pager
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -154,7 +158,7 @@ fun MovieCarousel(
                         (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
 
                     // Calculate scale factor for the poster
-                    val scaleFactor = 1f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
+                    val scaleFactor = 0.9f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
 
                     // Target vertical offset for the poster
                     val targetVerticalOffset = if (page == pagerState.currentPage) 45.dp else 0.dp
@@ -176,7 +180,7 @@ fun MovieCarousel(
                             }
                             .alpha(scaleFactor.coerceIn(0f, 1f))
                             .padding(8.dp)
-                            .height(300.dp) //poster image height
+                            .height(340.dp) //poster image height
                             .clip(RoundedCornerShape(imageCornerRadius))
                             .offset(y = animatedVerticalOffset)
                     ) {
@@ -197,9 +201,8 @@ fun MovieCarousel(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 26.dp),
-                    style = TextStyle(color = Color.White),
-                    maxLines = 1,
-                    fontSize = 20.sp,
+                    style = TextStyle(color = if (isDarkMode) Color.White else Color.Black), // Adjust text color based on theme                    maxLines = 1,
+                    fontSize = 22.sp,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -211,15 +214,15 @@ fun MovieCarousel(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.Star,
+                    imageVector = Icons.Filled.Star,
                     contentDescription = null,
                     tint = Color.Yellow,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(22.dp)
                 )
                 Text(
                     text = mockMovies[pagerState.currentPage].vote_average.format(1),
-                    style = TextStyle(color = Color.White),
-                    fontSize = 15.sp
+                    fontSize = 18.sp,
+                    style = TextStyle(color = if (isDarkMode) Color.White else Color.Black), // Adjust text color based on theme                    fontSize = 15.sp
                 )
             }
         }
